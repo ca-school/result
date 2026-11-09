@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Student Result Portal</title>
+  
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0" />
+  
+  <!-- Lottie Animations & Confetti Celebration -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --secondary: #ec4899;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text-dark: #0f172a;
+      --text-muted: #475569;
+      --glass-bg: rgba(255, 255, 255, 0.74);
+      --glass-border: rgba(255, 255, 255, 0.92);
+      --glass-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.16), 0 0 0 1.5px rgba(255,255,255,0.7) inset;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0e7ff 0%, #fdf2f8 50%, #ede9fe 100%);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+      padding: 16px 12px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 3D Animated Ambient Background Blobs */
+    .bg-shape {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(75px);
+      z-index: 0;
+      opacity: 0.65;
+      pointer-events: none;
+      animation: float3D 14s infinite alternate ease-in-out;
+    }
+    .shape-1 { width: 360px; height: 360px; background: #818cf8; top: -100px; left: -100px; }
+    .shape-2 { width: 320px; height: 320px; background: #f472b6; bottom: -80px; right: -80px; animation-delay: -5s; }
+    .shape-3 { width: 260px; height: 260px; background: #38bdf8; top: 40%; left: 55%; animation-delay: -9s; }
+
+    @keyframes float3D {
+      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+      100% { transform: translate3d(40px, 50px, 0) scale(1.12) rotate(15deg); }
+    }
+
+    /* Floating Language Pill (No Top Bar for clean Embedding) */
+    .floating-controls {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.12);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .lang-btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      background: #ffffff;
+      box-shadow: 0 12px 25px rgba(79, 70, 229, 0.22);
+    }
+
+    /* Main Wrapper */
+    .main-wrapper {
+      width: 100%;
+      max-width: 880px;
+      z-index: 2;
+      margin-top: 10px;
+      perspective: 1200px;
+    }
+
+    /* 3D Glass Card */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 28px;
+      box-shadow: var(--glass-shadow);
+      padding: 28px 20px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transform-style: preserve-3d;
+    }
+    @media (min-width: 768px) {
+      .glass-card { padding: 38px 36px; }
+    }
+
+    /* Portal Header */
+    .portal-header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+    .lottie-box {
+      width: 130px;
+      height: 130px;
+      margin: -18px auto 4px;
+      filter: drop-shadow(0 12px 20px rgba(79, 70, 229, 0.2));
+    }
+    .portal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 50%, #db2777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .portal-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* Search Form Grid */
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 640px) {
+      .search-grid { grid-template-columns: 1fr 1fr; }
+      .full-span { grid-column: 1 / -1; }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .input-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .input-label span.material-symbols-rounded {
+      font-size: 18px;
+      color: var(--primary);
+    }
+
+    .glass-input, .glass-select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.88);
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) inset, 0 4px 12px rgba(79, 70, 229, 0.05);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+    .glass-input:focus, .glass-select:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+      transform: translateY(-1px);
+    }
+    .input-hint {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* 3D Button */
+    .btn-3d {
+      width: 100%;
+      padding: 16px 24px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 24px -6px rgba(124, 58, 237, 0.5), 0 -3px 0 rgba(0,0,0,0.2) inset, 0 2px 0 rgba(255,255,255,0.4) inset;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 6px;
+    }
+    .btn-3d:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 18px 30px -6px rgba(124, 58, 237, 0.65), 0 -3px 0 rgba(0,0,0,0.2) inset;
+    }
+    .btn-3d:active {
+      transform: translateY(2px);
+      box-shadow: 0 6px 12px -4px rgba(124, 58, 237, 0.4);
+    }
+    .btn-3d:disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Alert Box */
+    .error-box {
+      display: none;
+      background: rgba(254, 226, 226, 0.95);
+      border: 1.5px solid #f87171;
+      color: #b91c1c;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    /* ================= RESULT VIEW STYLING ================= */
+    #result-section {
+      display: none;
+      animation: popUp3D 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes popUp3D {
+      0% { opacity: 0; transform: translateY(35px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top-bar-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-glass-small {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #ffffff;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+      transition: all 0.2s ease;
+    }
+    .btn-glass-small:hover {
+      background: #ffffff;
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .btn-print-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+    }
+    .btn-print-primary:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #ffffff;
+    }
+
+    /* Student Profile Banner */
+    .profile-banner {
+      background: linear-gradient(135deg, #312e81 0%, #4f46e5 55%, #db2777 100%);
+      border-radius: 22px;
+      padding: 24px;
+      color: #ffffff;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 16px 32px -10px rgba(79, 70, 229, 0.45);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+    .profile-banner::after {
+      content: '';
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 70%);
+      top: -60px;
+      right: -60px;
+      border-radius: 50%;
+    }
+
+    .profile-info h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+    .profile-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      font-size: 0.86rem;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+    .profile-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .grade-badge-3d {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      padding: 12px 20px;
+      border-radius: 18px;
+      text-align: center;
+      min-width: 110px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .grade-badge-3d .grade-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .grade-badge-3d .grade-lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+      margin-top: 4px;
+      font-weight: 700;
+    }
+
+    /* 4 Summary 3D KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (min-width: 680px) {
+      .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    }
+
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid #ffffff;
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 10px 25px -5px rgba(30, 27, 75, 0.06);
+      transition: transform 0.25s ease;
+    }
+    .kpi-card:hover { transform: translateY(-4px); }
+    .kpi-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    .kpi-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+    .kpi-lbl {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* Section Headings */
+    .sec-head {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sec-head span.material-symbols-rounded {
+      color: var(--primary);
+    }
+
+    /* Subject Wise Marks Grid */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+    @media (min-width: 600px) {
+      .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .sub-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #ffffff;
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sub-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sub-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+    .sub-score {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--primary);
+      background: rgba(79, 70, 229, 0.1);
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+    .prog-track {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+    .prog-fill {
+      height: 100%;
+      border-radius: 50px;
+      background: linear-gradient(90deg, #4f46e5, #ec4899);
+      width: 0%;
+      transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .sub-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Comparison & Attendance Analytics Box */
+    .comparison-box {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1.5px solid #ffffff;
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.06);
+    }
+    .comp-row {
+      margin-bottom: 16px;
+    }
+    .comp-row:last-child { margin-bottom: 0; }
+    .comp-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+
+    /*Bottom Print CTA inside Result Card */
+    .bottom-print-bar {
+      display: flex;
+      justify-content: center;
+      margin-top: 22px;
+    }
+
+    /* ================= OFFICIAL PRINTABLE REPORT CARD ================= */
+    #printable-report-card {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm;
+      }
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        color: #000000 !important;
+      }
+      .bg-shape, .floating-controls, .main-wrapper {
+        display: none !important;
+      }
+      #printable-report-card {
+        display: block !important;
+        width: 100%;
+        border: 2px solid #1e293b;
+        padding: 24px;
+        border-radius: 8px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      .rc-header {
+        text-align: center;
+        border-bottom: 2px solid #1e293b;
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+      }
+      .rc-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #0f172a;
+        letter-spacing: 1px;
+      }
+      .rc-subtitle {
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+        margin-top: 4px;
+      }
+      .rc-student-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 24px;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin-bottom: 18px;
+        font-size: 13px;
+      }
+      .rc-student-grid div strong {
+        color: #0f172a;
+        display: inline-block;
+        width: 120px;
+      }
+      .rc-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 18px;
+        font-size: 13px;
+      }
+      .rc-table th, .rc-table td {
+        border: 1px solid #94a3b8;
+        padding: 9px 12px;
+        text-align: left;
+      }
+      .rc-table th {
+        background: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-weight: 800;
+        color: #0f172a;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .rc-table td.num, .rc-table th.num {
+        text-align: center;
+      }
+      .rc-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .rc-sum-box {
+        border: 1px solid #94a3b8;
+        padding: 10px;
+        text-align: center;
+        border-radius: 6px;
+        background: #f8fafc !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .rc-sum-box .lbl {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #475569;
+      }
+      .rc-sum-box .val {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-top: 3px;
+      }
+      .rc-signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 55px;
+        padding: 0 20px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .rc-sig-line {
+        border-top: 1.5px solid #334155;
+        width: 160px;
+        text-align: center;
+        padding-top: 6px;
+      }
+      .rc-footer-note {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 11px;
+        color: #64748b;
+        border-top: 1px dashed #cbd5e1;
+        padding-top: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Ambient Blobs -->
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+  <div class="bg-shape shape-3"></div>
+
+  <!-- Floating Language Switcher -->
+  <div class="floating-controls">
+    <button class="lang-btn" onclick="toggleLanguage()">
+      <span class="material-symbols-rounded" style="font-size:18px;">translate</span>
+      <span id="lang-btn-text">हिंदी में देखें</span>
+    </button>
+  </div>
+
+  <div class="main-wrapper">
+
+    <!-- ==================== 1. SEARCH SCREEN ==================== -->
+    <div id="search-section" class="glass-card">
+      <div class="portal-header">
+        <div class="lottie-box">
+          <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_touohxv0.json" background="transparent" speed="1" loop autoplay></lottie-player>
+        </div>
+        <h1 class="portal-title" data-i18n="title">Result Portal</h1>
+        <p class="portal-subtitle" data-i18n="subtitle">Enter your details below to view your detailed academic performance</p>
+      </div>
+
+      <form id="result-form" onsubmit="handleSearch(event)">
+        <div class="search-grid">
+          
+          <!-- Class Selector -->
+          <div class="input-group">
+            <label class="input-label">
+              <span class="material-symbols-rounded">school</span>
+              <span data-i18n="lblClass">Select Class</span>
+            </label>
+            <select id="inp-class" class="glass-select" required>
+              <option value="" disabled selected data-i18n="optClass">-- Choose Class --</option>
+              <option value="NC">Class NC</option>
+              <option value="LKG">Class LKG</option>
+              <option value="UKG">Class UKG</option>
+              <option value="Class 1">Class 1</option>
+              <option value="Class 2">Class 2</option>
+              <option value="Class 3">Class 3</option>
+              <option value="Class 4">Class 4</option>
+              <option value="Class 5">Class 5</option>
+              <option value="Class 6">Class 6</option>
+              <option value="Class 7">Class 7</option>
+              <option value="Class 8">Class 8</option>
+            </select>
+          </div>
+
+          <!-- Roll Number -->
+          <div class="input-group">
+            <label class="input-label">
+              <span class="material-symbols-rounded">badge</span>
+              <span data-i18n="lblRoll">Roll Number</span>
+            </label>
+            <input type="text" inputmode="numeric" id="inp-roll" class="glass-input" placeholder="e.g. 1, 12, 25" required>
+          </div>
+
+          <!-- Student Name OR Father's Name -->
+          <div class="input-group full-span">
+            <label class="input-label">
+              <span class="material-symbols-rounded">person_search</span>
+              <span data-i18n="lblName">Student Name OR Father's Name</span>
+            </label>
+            <input type="text" id="inp-name" class="glass-input" placeholder="Enter Name or Father's Name (Any Capital/Small letters)" required>
+            <span class="input-hint" data-i18n="nameHint">✨ Smart Match: Capital or small letters don't matter, just spell the name right!</span>
+          </div>
+
+          <div class="full-span">
+            <button type="submit" id="btn-submit" class="btn-3d">
+              <span class="material-symbols-rounded">workspace_premium</span>
+              <span id="btn-submit-text" data-i18n="btnSearch">View Detailed Result</span>
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+      <div id="error-box" class="error-box">
+        <span class="material-symbols-rounded">error</span>
+        <span id="error-text">Student record not found!</span>
+      </div>
+    </div>
+
+    <!-- ==================== 2. DETAILED RESULT VIEW ==================== -->
+    <div id="result-section">
+      
+      <div class="top-bar-actions">
+        <button class="btn-glass-small" onclick="resetSearch()">
+          <span class="material-symbols-rounded">arrow_back</span>
+          <span data-i18n="btnBack">Search Another</span>
+        </button>
+        <button class="btn-glass-small btn-print-primary" onclick="window.print()">
+          <span class="material-symbols-rounded">print</span>
+          <span data-i18n="btnPrint">Print Report Card</span>
+        </button>
+      </div>
+
+      <div class="glass-card">
+        
+        <!-- Profile Banner -->
+        <div class="profile-banner">
+          <div class="profile-info">
+            <h2 id="res-name">STUDENT NAME</h2>
+            <div class="profile-meta">
+              <span><i class="material-symbols-rounded" style="font-size:17px;">supervisor_account</i> <b data-i18n="metaFather">Father:</b> <span id="res-father">-</span></span>
+              <span><i class="material-symbols-rounded" style="font-size:17px;">pin</i> <b data-i18n="metaRoll">Roll No:</b> <span id="res-roll">-</span></span>
+              <span><i class="material-symbols-rounded" style="font-size:17px;">class</i> <b data-i18n="metaClass">Class:</b> <span id="res-class">-</span></span>
+            </div>
+          </div>
+          <div class="grade-badge-3d">
+            <div class="grade-val" id="res-grade">A+</div>
+            <div class="grade-lbl" id="res-status">PASSED</div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:rgba(79,70,229,0.12); color:#4f46e5;">
+              <span class="material-symbols-rounded">functions</span>
+            </div>
+            <div class="kpi-val" id="res-total">0 / 0</div>
+            <div class="kpi-lbl" data-i18n="kpiTotal">Marks Obtained</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:rgba(236,72,153,0.12); color:#db2777;">
+              <span class="material-symbols-rounded">percent</span>
+            </div>
+            <div class="kpi-val" id="res-percent">0%</div>
+            <div class="kpi-lbl" data-i18n="kpiPercent">Percentage</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:rgba(16,185,129,0.12); color:#059669;">
+              <span class="material-symbols-rounded">event_available</span>
+            </div>
+            <div class="kpi-val" id="res-attendance">-</div>
+            <div class="kpi-lbl" data-i18n="kpiAtt">Attendance</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon" style="background:rgba(245,158,11,0.14); color:#d97706;">
+              <span class="material-symbols-rounded">emoji_events</span>
+            </div>
+            <div class="kpi-val" id="res-rank">#1</div>
+            <div class="kpi-lbl" data-i18n="kpiRank">Class Rank</div>
+          </div>
+        </div>
+
+        <!-- Subject Breakdown -->
+        <div class="sec-head">
+          <span class="material-symbols-rounded">analytics</span>
+          <span data-i18n="secSubjects">Subject-Wise Detailed Marks & Class Comparison</span>
+        </div>
+        <div id="subjects-container" class="subjects-grid"></div>
+
+        <!-- Overall Class & Attendance Comparison -->
+        <div class="sec-head">
+          <span class="material-symbols-rounded">insights</span>
+          <span data-i18n="secCompare">Performance & Attendance Insights</span>
+        </div>
+        <div class="comparison-box">
+          
+          <div class="comp-row">
+            <div class="comp-header">
+              <span data-i18n="compYourScore">Your Percentage vs Class Average</span>
+              <span id="comp-score-text">0% (Avg: 0%)</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" id="bar-your-score" style="background: linear-gradient(90deg, #4f46e5, #06b6d4);"></div>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="comp-header">
+              <span data-i18n="compTopper">Class Topper Score</span>
+              <span id="comp-topper-text">0%</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" id="bar-topper-score" style="background: linear-gradient(90deg, #f59e0b, #ef4444);"></div>
+            </div>
+          </div>
+
+          <div class="comp-row">
+            <div class="comp-header">
+              <span data-i18n="compAtt">Your Attendance vs Class Highest Attendance</span>
+              <span id="comp-att-text">-</span>
+            </div>
+            <div class="prog-track">
+              <div class="prog-fill" id="bar-att-score" style="background: linear-gradient(90deg, #10b981, #059669);"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dedicated Bottom Print Button -->
+        <div class="bottom-print-bar">
+          <button class="btn-3d" style="max-width:340px;" onclick="window.print()">
+            <span class="material-symbols-rounded">print</span>
+            <span data-i18n="btnPrint">Print Official Report Card</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== 3. DEDICATED PRINTABLE REPORT CARD ==================== -->
+  <div id="printable-report-card">
+    <div class="rc-header">
+      <div class="rc-title">OFFICIAL ACADEMIC REPORT CARD</div>
+      <div class="rc-subtitle">Statement of Marks & Attendance Performance (Session 2026-27)</div>
+    </div>
+
+    <div class="rc-student-grid">
+      <div><strong>Student Name:</strong> <span id="rc-name">-</span></div>
+      <div><strong>Class:</strong> <span id="rc-class">-</span></div>
+      <div><strong>Father's Name:</strong> <span id="rc-father">-</span></div>
+      <div><strong>Roll Number:</strong> <span id="rc-roll">-</span></div>
+      <div><strong>Attendance:</strong> <span id="rc-att">-</span></div>
+      <div><strong>Result Status:</strong> <span id="rc-status">-</span></div>
+    </div>
+
+    <table class="rc-table">
+      <thead>
+        <tr>
+          <th style="width:50px;" class="num">S.No</th>
+          <th>Subject Name</th>
+          <th class="num">Max Marks</th>
+          <th class="num">Marks Obtained</th>
+          <th class="num">Class Average</th>
+          <th class="num">Subject Highest</th>
+        </tr>
+      </thead>
+      <tbody id="rc-tbody"></tbody>
+    </table>
+
+    <div class="rc-summary-grid">
+      <div class="rc-sum-box">
+        <div class="lbl">Total Marks</div>
+        <div class="val" id="rc-total">0 / 0</div>
+      </div>
+      <div class="rc-sum-box">
+        <div class="lbl">Percentage</div>
+        <div class="val" id="rc-percent">0%</div>
+      </div>
+      <div class="rc-sum-box">
+        <div class="lbl">Overall Grade</div>
+        <div class="val" id="rc-grade">A+</div>
+      </div>
+      <div class="rc-sum-box">
+        <div class="lbl">Class Rank</div>
+        <div class="val" id="rc-rank">#1</div>
+      </div>
+    </div>
+
+    <div class="rc-signatures">
+      <div class="rc-sig-line">Class Teacher's Signature</div>
+      <div class="rc-sig-line">Parent / Guardian Signature</div>
+      <div class="rc-sig-line">Principal's Signature</div>
+    </div>
+
+    <div class="rc-footer-note">
+      Computer Generated Digital Report Card • Verified from Official School Examination Records
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // GOOGLE SHEET CONFIGURATION
+    // ============================================================================
+    const SHEET_ID = "1Z2wmGyfiYwe40Zus-6EVEX76PsaQflraFp4umDVpmtk";
+    const classDataCache = {};
+
+    // Alternative Sheet Tab Names (In case your sheet tabs are named slightly differently)
+    const SHEET_ALIASES = {
+      "NC": ["NC", "Nursery", "NUR", "Class NC"],
+      "LKG": ["LKG", "Class LKG", "L.K.G"],
+      "UKG": ["UKG", "Class UKG", "U.K.G"],
+      "Class 1": ["Class 1", "1", "1st", "Class-1", "CLASS 1", "I"],
+      "Class 2": ["Class 2", "2", "2nd", "Class-2", "CLASS 2", "II"],
+      "Class 3": ["Class 3", "3", "3rd", "Class-3", "CLASS 3", "III"],
+      "Class 4": ["Class 4", "4", "4th", "Class-4", "CLASS 4", "IV"],
+      "Class 5": ["Class 5", "5", "5th", "Class-5", "CLASS 5", "V"],
+      "Class 6": ["Class 6", "6", "6th", "Class-6", "CLASS 6", "VI"],
+      "Class 7": ["Class 7", "7", "7th", "Class-7", "CLASS 7", "VII"],
+      "Class 8": ["Class 8", "8", "8th", "Class-8", "CLASS 8", "VIII"]
+    };
+
+    const NON_SUBJECT_KEYS = [
+      "roll no.", "roll", "roll no", "name of students", "name", "student name", 
+      "father's /guardian name", "father name", "father's name", "udise class 2026-27", 
+      "actual class", "class", "marks obtained (1st)", "marks obtained", 
+      "percentage(1st)", "percentage", "percentage (1st)", "percent age", "attendance (1st)", "attendance"
+    ];
+
+    // ============================================================================
+    // BILINGUAL TRANSLATION DICTIONARY (ENGLISH & HINDI)
+    // ============================================================================
+    let currentLang = 'en';
+    const i18n = {
+      en: {
+        btnLang: "हिंदी में देखें",
+        title: "Result Portal",
+        subtitle: "Enter your details below to view your detailed academic performance",
+        lblClass: "Select Class",
+        optClass: "-- Choose Class --",
+        lblRoll: "Roll Number",
+        lblName: "Student Name OR Father's Name",
+        nameHint: "✨ Smart Match: Capital or small letters don't matter, just spell the name right!",
+        btnSearch: "View Detailed Result",
+        btnLoading: "Fetching Live Result...",
+        btnBack: "Search Another",
+        btnPrint: "Print Report Card",
+        metaFather: "Father:",
+        metaRoll: "Roll No:",
+        metaClass: "Class:",
+        kpiTotal: "Marks Obtained",
+        kpiPercent: "Percentage",
+        kpiAtt: "Attendance",
+        kpiRank: "Class Rank",
+        secSubjects: "Subject-Wise Detailed Marks & Class Comparison",
+        secCompare: "Performance & Attendance Insights",
+        compYourScore: "Your Percentage vs Class Average",
+        compTopper: "Class Topper Percentage",
+        compAtt: "Your Attendance vs Class Highest Attendance",
+        errNotFound: "No matching result found! Please check your Class, Roll No, and Name spelling.",
+        errNetwork: "Could not load sheet data. Please check your internet connection or sheet tab name."
+      },
+      hi: {
+        btnLang: "View in English",
+        title: "परीक्षा परिणाम पोर्टल",
+        subtitle: "अपना विस्तृत रिजल्ट और उपस्थिति देखने के लिए नीचे विवरण दर्ज करें",
+        lblClass: "कक्षा चुनें (Class)",
+        optClass: "-- अपनी कक्षा चुनें --",
+        lblRoll: "रोल नंबर (Roll No.)",
+        lblName: "विद्यार्थी का नाम या पिता का नाम",
+        nameHint: "✨ स्मार्ट सर्च: छोटे या बड़े अक्षरों (Capital/Small) से कोई फर्क नहीं पड़ता, बस स्पेलिंग सही लिखें!",
+        btnSearch: "विस्तृत परिणाम देखें",
+        btnLoading: "रिजल्ट खोजा जा रहा है...",
+        btnBack: "दूसरा रिजल्ट देखें",
+        btnPrint: "रिपोर्ट कार्ड प्रिंट करें",
+        metaFather: "पिता का नाम:",
+        metaRoll: "रोल नंबर:",
+        metaClass: "कक्षा:",
+        kpiTotal: "कुल प्राप्तांक",
+        kpiPercent: "प्रतिशत (%)",
+        kpiAtt: "उपस्थिति (Attendance)",
+        kpiRank: "कक्षा रैंक",
+        secSubjects: "विषयवार अंक और कक्षा औसत से तुलना",
+        secCompare: "प्रदर्शन और उपस्थिति विश्लेषण",
+        compYourScore: "आपका प्रतिशत बनाम कक्षा का औसत",
+        compTopper: "कक्षा टॉपर का प्रतिशत",
+        compAtt: "आपकी उपस्थिति बनाम सर्वाधिक उपस्थिति",
+        errNotFound: "कोई परिणाम नहीं मिला! कृपया अपनी कक्षा, रोल नंबर और नाम की स्पेलिंग जांचें।",
+        errNetwork: "डेटा लोड नहीं हो सका। कृपया अपना इंटरनेट कनेक्शन जांचें।"
+      }
+    };
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'hi' : 'en';
+      document.getElementById('lang-btn-text').innerText = i18n[currentLang].btnLang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[currentLang][key]) {
+          el.innerText = i18n[currentLang][key];
+        }
+      });
+    }
+
+    // ============================================================================
+    // NORMALIZE STRING (CASE-INSENSITIVE, IGNORE PUNCTUATION & EXTRA SPACES)
+    // ============================================================================
+    function cleanAlpha(str) {
+      if (!str) return "";
+      return String(str)
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function isFlexibleNameMatch(userInput, studentName, fatherName) {
+      const q = cleanAlpha(userInput);
+      if (!q || q.length < 2) return false;
+
+      const sName = cleanAlpha(studentName);
+      const fName = cleanAlpha(fatherName);
+
+      if (sName && (sName.includes(q) || (sName.length > 2 && q.includes(sName)))) return true;
+      if (fName && (fName.includes(q) || (fName.length > 2 && q.includes(fName)))) return true;
+
+      const qWords = q.split(" ").filter(Boolean);
+      const combinedWords = (sName + " " + fName).split(" ").filter(Boolean);
+
+      return qWords.every(w => combinedWords.some(cw => cw === w || cw.startsWith(w) || w.startsWith(cw)));
+    }
+
+    // ============================================================================
+    // ROBUST CSV PARSER & MULTI-METHOD GOOGLE SHEET FETCHER
+    // ============================================================================
+    function parseCSVText(csvText) {
+      const rows = [];
+      let currentRow = [];
+      let currentVal = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
+
+        if (inQuotes) {
+          if (char === '"' && nextChar === '"') {
+            currentVal += '"';
+            i++;
+          } else if (char === '"') {
+            inQuotes = false;
+          } else {
+            currentVal += char;
+          }
+        } else {
+          if (char === '"') {
+            inQuotes = true;
+          } else if (char === ',') {
+            currentRow.push(currentVal.trim());
+            currentVal = '';
+          } else if (char === '\n' || (char === '\r' && nextChar === '\n')) {
+            currentRow.push(currentVal.trim());
+            rows.push(currentRow);
+            currentRow = [];
+            currentVal = '';
+            if (char === '\r') i++;
+          } else if (char !== '\r') {
+            currentVal += char;
+          }
+        }
+      }
+      if (currentVal !== '' || currentRow.length > 0) {
+        currentRow.push(currentVal.trim());
+        rows.push(currentRow);
+      }
+
+      if (rows.length === 0) throw new Error("Empty CSV");
+
+      // Find header row (first row that contains Roll or Name)
+      let headerRowIdx = 0;
+      for (let r = 0; r < Math.min(5, rows.length); r++) {
+        const joined = rows[r].join(" ").toLowerCase();
+        if (joined.includes("roll") || joined.includes("name")) {
+          headerRowIdx = r;
+          break;
+        }
+      }
+
+      const headers = rows[headerRowIdx].map(h => String(h || "").trim());
+      const records = [];
+
+      for (let i = headerRowIdx + 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.every(cell => cell === "")) continue;
+        const obj = {};
+        headers.forEach((h, idx) => {
+          if (h) obj[h] = r[idx] !== undefined ? String(r[idx]).trim() : "";
+        });
+        records.push(obj);
+      }
+
+      return { headers, records };
+    }
+
+    async function fetchSheetDataSmart(selectedClass) {
+      if (classDataCache[selectedClass]) {
+        return classDataCache[selectedClass];
+      }
+
+      const candidateNames = SHEET_ALIASES[selectedClass] || [selectedClass];
+
+      for (const tabName of candidateNames) {
+        try {
+          const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+          const response = await fetch(csvUrl, { cache: "no-store" });
+          if (response.ok) {
+            const csvText = await response.text();
+            // Make sure it didn't return an HTML login page
+            if (csvText && !csvText.trim().startsWith("<!DOCTYPE html>")) {
+              const parsed = parseCSVText(csvText);
+              if (parsed.headers.length > 1) {
+                classDataCache[selectedClass] = parsed;
+                return parsed;
+              }
+            }
+          }
+        } catch (e) {
+          // Try next alias
+        }
+      }
+
+      throw new Error("Could not load sheet data");
+    }
+
+    // ============================================================================
+    // HANDLE SEARCH
+    // ============================================================================
+    async function handleSearch(e) {
+      e.preventDefault();
+      const cls = document.getElementById('inp-class').value;
+      const rollInput = document.getElementById('inp-roll').value.trim();
+      const nameInput = document.getElementById('inp-name').value.trim();
+
+      const errorBox = document.getElementById('error-box');
+      const errorText = document.getElementById('error-text');
+      const submitBtn = document.getElementById('btn-submit');
+      const submitBtnText = document.getElementById('btn-submit-text');
+
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtnText.innerText = i18n[currentLang].btnLoading;
+
+      try {
+        const sheetData = await fetchSheetDataSmart(cls);
+        const { headers, records } = sheetData;
+
+        // Identify key columns dynamically
+        const rollKey = headers.find(h => /roll/i.test(h)) || headers[0];
+        const nameKey = headers.find(h => (/student|name/i.test(h)) && !/father|guardian/i.test(h)) || headers[1];
+        const fatherKey = headers.find(h => /father|guardian/i.test(h)) || headers[2];
+        const totalKey = headers.find(h => /marks obtained|total/i.test(h));
+        const percentKey = headers.find(h => /percent/i.test(h));
+        const attKey = headers.find(h => /attendance/i.test(h));
+
+        // Identify Subject columns
+        const subjectKeys = headers.filter(h => {
+          const clean = h.trim().toLowerCase();
+          return clean && !NON_SUBJECT_KEYS.includes(clean);
+        });
+
+        // Filter valid students
+        const validStudents = records.filter(r => r[nameKey] && String(r[nameKey]).trim() !== "");
+
+        // Match student by Roll No + Flexible Name/Father Name
+        const matchedStudent = validStudents.find(st => {
+          const stRoll = String(st[rollKey] || "").trim().replace(/^0+/, "");
+          const inpRollClean = rollInput.replace(/^0+/, "");
+          const rollMatches = stRoll.toLowerCase() === inpRollClean.toLowerCase();
+          const nameMatches = isFlexibleNameMatch(nameInput, st[nameKey], st[fatherKey]);
+          return rollMatches && nameMatches;
+        });
+
+        if (!matchedStudent) {
+          errorText.innerText = i18n[currentLang].errNotFound;
+          errorBox.style.display = 'flex';
+          return;
+        }
+
+        renderDetailedResult(cls, matchedStudent, validStudents, {
+          rollKey, nameKey, fatherKey, totalKey, percentKey, attKey, subjectKeys
+        });
+
+      } catch (err) {
+        console.error("Result Fetch Error:", err);
+        errorText.innerText = i18n[currentLang].errNetwork;
+        errorBox.style.display = 'flex';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtnText.innerText = i18n[currentLang].btnSearch;
+      }
+    }
+
+    // ============================================================================
+    // RENDER RESULT + ATTENDANCE & PRINTABLE REPORT CARD
+    // ============================================================================
+    function renderDetailedResult(clsName, student, allStudents, keys) {
+      const { rollKey, nameKey, fatherKey, totalKey, percentKey, attKey, subjectKeys } = keys;
+
+      function calcStudentStats(st) {
+        let sum = 0;
+        let maxPossible = 0;
+
+        subjectKeys.forEach(sub => {
+          const raw = st[sub];
+          const num = parseFloat(raw);
+          if (!isNaN(num)) {
+            sum += num;
+            maxPossible += 100;
+          }
+        });
+
+        const sheetTotal = (totalKey && !isNaN(parseFloat(st[totalKey]))) ? parseFloat(st[totalKey]) : sum;
+        let sheetPercent = (percentKey && st[percentKey]) ? parseFloat(String(st[percentKey]).replace('%', '')) : NaN;
+        
+        if (isNaN(sheetPercent)) {
+          sheetPercent = maxPossible > 0 ? ((sheetTotal / maxPossible) * 100) : 0;
+        }
+
+        const attNum = (attKey && !isNaN(parseFloat(st[attKey]))) ? parseFloat(st[attKey]) : 0;
+
+        return {
+          total: sheetTotal,
+          maxPossible: maxPossible || (subjectKeys.length * 100),
+          percent: Math.min(100, Math.max(0, sheetPercent)),
+          attendance: attNum,
+          rawAttendance: (attKey && st[attKey] !== "") ? st[attKey] : "N/A"
+        };
+      }
+
+      const myStats = calcStudentStats(student);
+      const allStats = allStudents.map(s => ({ st: s, stats: calcStudentStats(s) }));
+
+      // Sort for Rank
+      allStats.sort((a, b) => b.stats.total - a.stats.total);
+      const myRank = allStats.findIndex(item => item.st === student) + 1;
+
+      const topperPercent = allStats.length > 0 ? allStats[0].stats.percent : myStats.percent;
+      const avgPercent = allStats.length > 0
+        ? allStats.reduce((acc, cur) => acc + cur.stats.percent, 0) / allStats.length
+        : myStats.percent;
+      const highestAtt = allStats.reduce((max, cur) => Math.max(max, cur.stats.attendance), 0);
+
+      // Populate Web Profile Header
+      const sNameVal = student[nameKey] || "-";
+      const fNameVal = student[fatherKey] || "N/A";
+      const rNoVal = student[rollKey] || "-";
+
+      document.getElementById('res-name').innerText = sNameVal;
+      document.getElementById('res-father').innerText = fNameVal;
+      document.getElementById('res-roll').innerText = rNoVal;
+      document.getElementById('res-class').innerText = clsName;
+
+      // Grade & Status (Fixed variable declaration)
+      const gradeInfo = getGradeInfo(myStats.percent);
+      document.getElementById('res-grade').innerText = gradeInfo.grade;
+      document.getElementById('res-status').innerText = gradeInfo.status;
+
+      // Populate KPI Cards
+      const totalStr = `${myStats.total} / ${myStats.maxPossible}`;
+      const percentStr = `${myStats.percent.toFixed(1)}%`;
+      const rankStr = `#${myRank} of ${allStudents.length}`;
+
+      document.getElementById('res-total').innerText = totalStr;
+      document.getElementById('res-percent').innerText = percentStr;
+      document.getElementById('res-attendance').innerText = myStats.rawAttendance;
+      document.getElementById('res-rank').innerText = rankStr;
+
+      // Populate Printable Report Card Header & Summary
+      document.getElementById('rc-name').innerText = sNameVal;
+      document.getElementById('rc-father').innerText = fNameVal;
+      document.getElementById('rc-roll').innerText = rNoVal;
+      document.getElementById('rc-class').innerText = clsName;
+      document.getElementById('rc-att').innerText = myStats.rawAttendance;
+      document.getElementById('rc-status').innerText = gradeInfo.status;
+      document.getElementById('rc-total').innerText = totalStr;
+      document.getElementById('rc-percent').innerText = percentStr;
+      document.getElementById('rc-grade').innerText = gradeInfo.grade;
+      document.getElementById('rc-rank').innerText = rankStr;
+
+      // Populate Subject Cards & Print Table Rows
+      const subContainer = document.getElementById('subjects-container');
+      const rcTbody = document.getElementById('rc-tbody');
+      subContainer.innerHTML = '';
+      rcTbody.innerHTML = '';
+
+      let serialNo = 1;
+      subjectKeys.forEach(sub => {
+        const rawVal = student[sub];
+        const displayVal = (rawVal !== undefined && rawVal !== "") ? rawVal : "-";
+        const mySubScore = parseFloat(rawVal);
+        const isNumeric = !isNaN(mySubScore);
+
+        let subScores = allStudents.map(s => parseFloat(s[sub])).filter(n => !isNaN(n));
+        let subAvg = subScores.length ? (subScores.reduce((a, b) => a + b, 0) / subScores.length).toFixed(1) : "-";
+        let subMax = subScores.length ? Math.max(...subScores) : 100;
+        let barWidth = isNumeric ? Math.min(100, Math.max(5, mySubScore)) : 0;
+
+        // Web Card
+        const card = document.createElement('div');
+        card.className = 'sub-card';
+        card.innerHTML = `
+          <div class="sub-top">
+            <span class="sub-name">${sub}</span>
+            <span class="sub-score">${displayVal}</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="width: 0%" data-target="${barWidth}%"></div>
+          </div>
+          <div class="sub-meta">
+            <span>Class Avg: ${subAvg}</span>
+            <span>Highest: ${subMax}</span>
+          </div>
+        `;
+        subContainer.appendChild(card);
+
+        // Printable Report Card Row
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="num">${serialNo++}</td>
+          <td><strong>${sub}</strong></td>
+          <td class="num">100</td>
+          <td class="num"><strong>${displayVal}</strong></td>
+          <td class="num">${subAvg}</td>
+          <td class="num">${subMax}</td>
+        `;
+        rcTbody.appendChild(tr);
+      });
+
+      // Populate Overall Comparison Bars
+      document.getElementById('comp-score-text').innerText = `${myStats.percent.toFixed(1)}% (Class Avg: ${avgPercent.toFixed(1)}%)`;
+      document.getElementById('comp-topper-text').innerText = `${topperPercent.toFixed(1)}%`;
+      
+      const attPercent = highestAtt > 0 ? Math.min(100, (myStats.attendance / highestAtt) * 100) : 85;
+      document.getElementById('comp-att-text').innerText = `${myStats.rawAttendance} (Highest: ${highestAtt || 'N/A'})`;
+
+      // Switch Screen
+      document.getElementById('search-section').style.display = 'none';
+      document.getElementById('result-section').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Animate Progress Bars
+      setTimeout(() => {
+        document.querySelectorAll('#subjects-container .prog-fill').forEach(bar => {
+          bar.style.width = bar.getAttribute('data-target');
+        });
+        document.getElementById('bar-your-score').style.width = `${myStats.percent}%`;
+        document.getElementById('bar-topper-score').style.width = `${topperPercent}%`;
+        document.getElementById('bar-att-score').style.width = `${attPercent}%`;
+      }, 150);
+
+      triggerConfetti();
+    }
+
+    function getGradeInfo(percent) {
+      if (percent >= 90) return { grade: "A+", status: "OUTSTANDING" };
+      if (percent >= 80) return { grade: "A", status: "EXCELLENT" };
+      if (percent >= 70) return { grade: "B+", status: "VERY GOOD" };
+      if (percent >= 60) return { grade: "B", status: "GOOD" };
+      if (percent >= 45) return { grade: "C", status: "PASSED" };
+      if (percent >= 33) return { grade: "D", status: "PASSED" };
+      return { grade: "E", status: "NEEDS IMPROVEMENT" };
+    }
+
+    function resetSearch() {
+      document.getElementById('result-section').style.display = 'none';
+      document.getElementById('search-section').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
