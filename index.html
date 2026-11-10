@@ -26,8 +26,8 @@
       --danger: #ef4444;
       --text-dark: #0f172a;
       --text-muted: #475569;
-      --glass-bg: rgba(255, 255, 255, 0.74);
-      --glass-border: rgba(255, 255, 255, 0.92);
+      --glass-bg: rgba(255, 255, 255, 0.76);
+      --glass-border: rgba(255, 255, 255, 0.94);
       --glass-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.16), 0 0 0 1.5px rgba(255,255,255,0.7) inset;
     }
 
@@ -106,7 +106,7 @@
     /* Main Wrapper */
     .main-wrapper {
       width: 100%;
-      max-width: 880px;
+      max-width: 860px;
       z-index: 2;
       margin-top: 10px;
       perspective: 1200px;
@@ -394,14 +394,14 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
     }
     @media (min-width: 680px) {
       .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
     }
 
     .kpi-card {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       border: 1.5px solid #ffffff;
       border-radius: 20px;
       padding: 16px;
@@ -424,12 +424,22 @@
     }
     .kpi-val {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.45rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: var(--text-dark);
+      word-break: break-word;
+    }
+    .kpi-val.not-calc {
+      font-size: 0.95rem;
+      color: #dc2626;
+      background: rgba(254, 226, 226, 0.7);
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-block;
+      width: fit-content;
     }
     .kpi-lbl {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -451,66 +461,76 @@
       color: var(--primary);
     }
 
-    /* Subject Wise Marks Grid */
-    .subjects-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 22px;
-    }
-    @media (min-width: 600px) {
-      .subjects-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    .sub-card {
+    /* 3D Glassmorphic Marks Table (No Progress Bar, No Max Marks) */
+    .marks-table-wrapper {
       background: rgba(255, 255, 255, 0.9);
       border: 1.5px solid #ffffff;
-      border-radius: 18px;
-      padding: 14px 16px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sub-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .sub-name {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--text-dark);
-    }
-    .sub-score {
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--primary);
-      background: rgba(79, 70, 229, 0.1);
-      padding: 3px 10px;
-      border-radius: 8px;
-    }
-    .prog-track {
-      width: 100%;
-      height: 8px;
-      background: #e2e8f0;
-      border-radius: 50px;
+      border-radius: 20px;
       overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(30, 27, 75, 0.06);
+      margin-bottom: 24px;
     }
-    .prog-fill {
-      height: 100%;
-      border-radius: 50px;
-      background: linear-gradient(90deg, #4f46e5, #ec4899);
-      width: 0%;
-      transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+
+    .web-marks-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
     }
-    .sub-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      color: var(--text-muted);
+
+    .web-marks-table thead tr {
+      background: linear-gradient(90deg, rgba(79, 70, 229, 0.1) 0%, rgba(236, 72, 153, 0.08) 100%);
+      border-bottom: 1.5px solid rgba(79, 70, 229, 0.15);
+    }
+
+    .web-marks-table th {
+      padding: 14px 18px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #312e81;
+    }
+
+    .web-marks-table td {
+      padding: 13px 18px;
+      font-size: 0.95rem;
       font-weight: 600;
+      color: var(--text-dark);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .web-marks-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .web-marks-table tbody tr:hover {
+      background: rgba(79, 70, 229, 0.04);
+    }
+
+    .web-marks-table .col-sno {
+      width: 70px;
+      text-align: center;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .web-marks-table .col-mark {
+      text-align: right;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .mark-pill {
+      display: inline-block;
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+      padding: 4px 14px;
+      border-radius: 10px;
+      min-width: 54px;
+      text-align: center;
     }
 
     /* Bottom Print CTA inside Result Card */
@@ -580,7 +600,7 @@
       .rc-student-grid div strong {
         color: #0f172a;
         display: inline-block;
-        width: 120px;
+        width: 125px;
       }
       .rc-table {
         width: 100%;
@@ -590,7 +610,7 @@
       }
       .rc-table th, .rc-table td {
         border: 1px solid #94a3b8;
-        padding: 9px 12px;
+        padding: 9px 14px;
         text-align: left;
       }
       .rc-table th {
@@ -627,7 +647,7 @@
         color: #475569;
       }
       .rc-sum-box .val {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 800;
         color: #0f172a;
         margin-top: 3px;
@@ -782,15 +802,15 @@
             <div class="kpi-icon" style="background:rgba(79,70,229,0.12); color:#4f46e5;">
               <span class="material-symbols-rounded">functions</span>
             </div>
-            <div class="kpi-val" id="res-total">0 / 0</div>
-            <div class="kpi-lbl" data-i18n="kpiTotal">Marks Obtained</div>
+            <div class="kpi-val" id="res-total">Not Calculated</div>
+            <div class="kpi-lbl" data-i18n="kpiTotal">Total Marks</div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-icon" style="background:rgba(236,72,153,0.12); color:#db2777;">
               <span class="material-symbols-rounded">percent</span>
             </div>
-            <div class="kpi-val" id="res-percent">0%</div>
+            <div class="kpi-val" id="res-percent">Not Calculated</div>
             <div class="kpi-lbl" data-i18n="kpiPercent">Percentage</div>
           </div>
 
@@ -806,17 +826,29 @@
             <div class="kpi-icon" style="background:rgba(245,158,11,0.14); color:#d97706;">
               <span class="material-symbols-rounded">emoji_events</span>
             </div>
-            <div class="kpi-val" id="res-rank">#1</div>
+            <div class="kpi-val" id="res-rank">-</div>
             <div class="kpi-lbl" data-i18n="kpiRank">Class Rank</div>
           </div>
         </div>
 
-        <!-- Subject Breakdown (Only Student's Own Marks) -->
+        <!-- Subject Breakdown in Clean Table (No Max Marks, No Progress Bar) -->
         <div class="sec-head">
-          <span class="material-symbols-rounded">menu_book</span>
+          <span class="material-symbols-rounded">table_chart</span>
           <span data-i18n="secSubjects">Subject-Wise Marks Statement</span>
         </div>
-        <div id="subjects-container" class="subjects-grid"></div>
+
+        <div class="marks-table-wrapper">
+          <table class="web-marks-table">
+            <thead>
+              <tr>
+                <th class="col-sno" data-i18n="thSno">S.No</th>
+                <th data-i18n="thSubject">Subject Name</th>
+                <th class="col-mark" data-i18n="thMarks">Marks Obtained</th>
+              </tr>
+            </thead>
+            <tbody id="web-marks-tbody"></tbody>
+          </table>
+        </div>
 
         <!-- Dedicated Bottom Print Button -->
         <div class="bottom-print-bar">
@@ -850,11 +882,9 @@
     <table class="rc-table">
       <thead>
         <tr>
-          <th style="width:60px;" class="num">S.No</th>
+          <th style="width:70px;" class="num">S.No</th>
           <th>Subject Name</th>
-          <th class="num">Max Marks</th>
-          <th class="num">Marks Obtained</th>
-          <th class="num">Subject Grade</th>
+          <th style="width:180px;" class="num">Marks Obtained</th>
         </tr>
       </thead>
       <tbody id="rc-tbody"></tbody>
@@ -862,20 +892,20 @@
 
     <div class="rc-summary-grid">
       <div class="rc-sum-box">
-        <div class="lbl">Marks Obtained</div>
-        <div class="val" id="rc-total">0 / 0</div>
+        <div class="lbl">Total Marks</div>
+        <div class="val" id="rc-total">Not Calculated</div>
       </div>
       <div class="rc-sum-box">
         <div class="lbl">Percentage</div>
-        <div class="val" id="rc-percent">0%</div>
+        <div class="val" id="rc-percent">Not Calculated</div>
       </div>
       <div class="rc-sum-box">
         <div class="lbl">Overall Grade</div>
-        <div class="val" id="rc-grade">A+</div>
+        <div class="val" id="rc-grade">-</div>
       </div>
       <div class="rc-sum-box">
         <div class="lbl">Class Rank</div>
-        <div class="val" id="rc-rank">#1</div>
+        <div class="val" id="rc-rank">-</div>
       </div>
     </div>
 
@@ -939,11 +969,14 @@
         metaFather: "Father:",
         metaRoll: "Roll No:",
         metaClass: "Class:",
-        kpiTotal: "Marks Obtained",
+        kpiTotal: "Total Marks",
         kpiPercent: "Percentage",
         kpiAtt: "Attendance",
         kpiRank: "Class Rank",
         secSubjects: "Subject-Wise Marks Statement",
+        thSno: "S.No",
+        thSubject: "Subject Name",
+        thMarks: "Marks Obtained",
         errNotFound: "No matching result found! Please check your Class, Roll No, and Name spelling.",
         errNetwork: "Could not load sheet data. Please check your internet connection."
       },
@@ -967,7 +1000,10 @@
         kpiPercent: "प्रतिशत (%)",
         kpiAtt: "उपस्थिति (Attendance)",
         kpiRank: "कक्षा रैंक",
-        secSubjects: "विषयवार प्राप्तांक विवरण",
+        secSubjects: "विषयवार प्राप्तांक तालिका",
+        thSno: "क्र.सं.",
+        thSubject: "विषय का नाम (Subject)",
+        thMarks: "प्राप्तांक (Marks)",
         errNotFound: "कोई परिणाम नहीं मिला! कृपया अपनी कक्षा, रोल नंबर और नाम की स्पेलिंग जांचें।",
         errNetwork: "डेटा लोड नहीं हो सका। कृपया अपना इंटरनेट कनेक्शन जांचें।"
       }
@@ -1177,45 +1213,86 @@
     }
 
     // ============================================================================
-    // RENDER PERSONAL RESULT & PRINTABLE REPORT CARD (NO CLASS COMPARISON)
+    // EXTRACT DENOMINATOR (FULL MARKS) FROM SHEET PERCENTAGE & TOTAL CELL
+    // ============================================================================
+    function extractSheetStats(st, totalKey, percentKey, attKey) {
+      const rawTotalStr = totalKey && st[totalKey] !== undefined ? String(st[totalKey]).trim() : "";
+      const rawPctStr = percentKey && st[percentKey] !== undefined ? String(st[percentKey]).trim() : "";
+      const rawAttStr = (attKey && st[attKey] !== undefined && String(st[attKey]).trim() !== "") ? String(st[attKey]).trim() : "N/A";
+
+      // Check if Percentage or Total is missing, error (#DIV/0!, #VALUE!), or not set up
+      const hasFormulaError = /#|error|na|n\/a|null/i.test(rawPctStr) || /#|error|na|n\/a|null/i.test(rawTotalStr);
+      const cleanTotalNum = parseFloat(rawTotalStr.replace(/[^0-9.-]/g, ""));
+      const cleanPctNum = parseFloat(rawPctStr.replace(/[^0-9.-]/g, ""));
+
+      // If Percentage cell is blank or invalid -> Not Calculated
+      if (!rawPctStr || !rawTotalStr || hasFormulaError || isNaN(cleanPctNum) || isNaN(cleanTotalNum) || cleanPctNum <= 0) {
+        return {
+          isCalculated: false,
+          obtainedMarks: 0,
+          fullMarksDenominator: null,
+          percentVal: null,
+          totalDisplay: "Not Calculated",
+          percentDisplay: "Not Calculated",
+          rawAttendance: rawAttStr
+        };
+      }
+
+      // Normalize Percentage & derive exact Denominator from formula:
+      // Case A: Sheet stores percentage as 0-100 (e.g. 82.5 or 82.5%) -> FullMarks = (Total * 100) / Pct
+      // Case B: Sheet stores percentage as decimal 0-1 (e.g. 0.825 without % sign) -> FullMarks = Total / Pct
+      let displayPct = cleanPctNum;
+      let rawDenominator = 0;
+
+      if (!rawPctStr.includes('%') && cleanPctNum <= 1 && cleanTotalNum > 1) {
+        displayPct = cleanPctNum * 100;
+        rawDenominator = cleanTotalNum / cleanPctNum;
+      } else {
+        displayPct = cleanPctNum;
+        rawDenominator = (cleanTotalNum * 100) / cleanPctNum;
+      }
+
+      // Round Denominator cleanly (snaps to nearest 5 or integer if within floating point tolerance)
+      let denominator = Math.round(rawDenominator);
+      if (Math.abs(denominator - Math.round(denominator / 5) * 5) <= 1) {
+        denominator = Math.round(denominator / 5) * 5;
+      }
+
+      const formattedTotal = Number.isInteger(cleanTotalNum) ? cleanTotalNum : cleanTotalNum.toFixed(1);
+      const formattedPct = Number.isInteger(displayPct) ? `${displayPct}%` : `${displayPct.toFixed(2)}%`;
+
+      return {
+        isCalculated: true,
+        obtainedMarks: cleanTotalNum,
+        fullMarksDenominator: denominator,
+        percentVal: displayPct,
+        totalDisplay: `${formattedTotal} / ${denominator}`,
+        percentDisplay: formattedPct,
+        rawAttendance: rawAttStr
+      };
+    }
+
+    // ============================================================================
+    // RENDER PERSONAL RESULT & PRINTABLE REPORT CARD (TABLE VIEW, NO FULL MARKS PER SUBJECT)
     // ============================================================================
     function renderDetailedResult(clsName, student, allStudents, keys) {
       const { rollKey, nameKey, fatherKey, totalKey, percentKey, attKey, subjectKeys } = keys;
 
-      function calcStudentStats(st) {
-        let sum = 0;
-        let maxPossible = 0;
+      const myStats = extractSheetStats(student, totalKey, percentKey, attKey);
 
-        subjectKeys.forEach(sub => {
-          const raw = st[sub];
-          const num = parseFloat(raw);
-          if (!isNaN(num)) {
-            sum += num;
-            maxPossible += 100;
-          }
-        });
+      // Calculate Personal Class Rank among students whose marks are calculated
+      let rankDisplay = "Not Calculated";
+      if (myStats.isCalculated) {
+        const calculatedPeers = allStudents
+          .map(s => ({ st: s, stats: extractSheetStats(s, totalKey, percentKey, attKey) }))
+          .filter(item => item.stats.isCalculated);
 
-        const sheetTotal = (totalKey && !isNaN(parseFloat(st[totalKey]))) ? parseFloat(st[totalKey]) : sum;
-        let sheetPercent = (percentKey && st[percentKey]) ? parseFloat(String(st[percentKey]).replace('%', '')) : NaN;
-        
-        if (isNaN(sheetPercent)) {
-          sheetPercent = maxPossible > 0 ? ((sheetTotal / maxPossible) * 100) : 0;
+        calculatedPeers.sort((a, b) => b.stats.obtainedMarks - a.stats.obtainedMarks);
+        const myRankIdx = calculatedPeers.findIndex(item => item.st === student);
+        if (myRankIdx !== -1) {
+          rankDisplay = `#${myRankIdx + 1}`;
         }
-
-        return {
-          total: sheetTotal,
-          maxPossible: maxPossible || (subjectKeys.length * 100),
-          percent: Math.min(100, Math.max(0, sheetPercent)),
-          rawAttendance: (attKey && st[attKey] !== "") ? st[attKey] : "N/A"
-        };
       }
-
-      const myStats = calcStudentStats(student);
-      const allStats = allStudents.map(s => ({ st: s, stats: calcStudentStats(s) }));
-
-      // Sort to determine Student's Personal Rank
-      allStats.sort((a, b) => b.stats.total - a.stats.total);
-      const myRank = allStats.findIndex(item => item.st === student) + 1;
 
       // Populate Web Profile Header
       const sNameVal = student[nameKey] || "-";
@@ -1227,19 +1304,28 @@
       document.getElementById('res-roll').innerText = rNoVal;
       document.getElementById('res-class').innerText = clsName;
 
-      const gradeInfo = getGradeInfo(myStats.percent);
+      // Grade & Status
+      const gradeInfo = myStats.isCalculated
+        ? getGradeInfo(myStats.percentVal)
+        : { grade: "-", status: "NOT CALCULATED" };
+
       document.getElementById('res-grade').innerText = gradeInfo.grade;
       document.getElementById('res-status').innerText = gradeInfo.status;
 
-      // Populate KPI Cards (Personal Only)
-      const totalStr = `${myStats.total} / ${myStats.maxPossible}`;
-      const percentStr = `${myStats.percent.toFixed(1)}%`;
-      const rankStr = `#${myRank}`;
+      // Populate KPI Cards
+      const elTotal = document.getElementById('res-total');
+      const elPercent = document.getElementById('res-percent');
+      const elRank = document.getElementById('res-rank');
 
-      document.getElementById('res-total').innerText = totalStr;
-      document.getElementById('res-percent').innerText = percentStr;
+      elTotal.innerText = myStats.totalDisplay;
+      elPercent.innerText = myStats.percentDisplay;
       document.getElementById('res-attendance').innerText = myStats.rawAttendance;
-      document.getElementById('res-rank').innerText = rankStr;
+      elRank.innerText = rankDisplay;
+
+      // Style "Not Calculated" badge if needed
+      elTotal.className = myStats.isCalculated ? 'kpi-val' : 'kpi-val not-calc';
+      elPercent.className = myStats.isCalculated ? 'kpi-val' : 'kpi-val not-calc';
+      elRank.className = myStats.isCalculated ? 'kpi-val' : 'kpi-val not-calc';
 
       // Populate Printable Report Card Header & Summary
       document.getElementById('rc-name').innerText = sNameVal;
@@ -1248,54 +1334,40 @@
       document.getElementById('rc-class').innerText = clsName;
       document.getElementById('rc-att').innerText = myStats.rawAttendance;
       document.getElementById('rc-status').innerText = gradeInfo.status;
-      document.getElementById('rc-total').innerText = totalStr;
-      document.getElementById('rc-percent').innerText = percentStr;
+      document.getElementById('rc-total').innerText = myStats.totalDisplay;
+      document.getElementById('rc-percent').innerText = myStats.percentDisplay;
       document.getElementById('rc-grade').innerText = gradeInfo.grade;
-      document.getElementById('rc-rank').innerText = rankStr;
+      document.getElementById('rc-rank').innerText = rankDisplay;
 
-      // Populate Subject Cards & Print Table Rows (Only Personal Score & Grade)
-      const subContainer = document.getElementById('subjects-container');
+      // Populate Subject Table Rows (Both Web Table & Print Report Card Table)
+      const webTbody = document.getElementById('web-marks-tbody');
       const rcTbody = document.getElementById('rc-tbody');
-      subContainer.innerHTML = '';
+      webTbody.innerHTML = '';
       rcTbody.innerHTML = '';
 
       let serialNo = 1;
       subjectKeys.forEach(sub => {
         const rawVal = student[sub];
-        const displayVal = (rawVal !== undefined && rawVal !== "") ? rawVal : "-";
-        const mySubScore = parseFloat(rawVal);
-        const isNumeric = !isNaN(mySubScore);
-        const subGrade = isNumeric ? getGradeInfo(mySubScore).grade : "-";
-        const barWidth = isNumeric ? Math.min(100, Math.max(5, mySubScore)) : 0;
+        const displayVal = (rawVal !== undefined && String(rawVal).trim() !== "") ? String(rawVal).trim() : "-";
+        const currentSno = serialNo++;
 
-        // Web Card (Personal Marks & Grade Only)
-        const card = document.createElement('div');
-        card.className = 'sub-card';
-        card.innerHTML = `
-          <div class="sub-top">
-            <span class="sub-name">${sub}</span>
-            <span class="sub-score">${displayVal} / 100</span>
-          </div>
-          <div class="prog-track">
-            <div class="prog-fill" style="width: 0%" data-target="${barWidth}%"></div>
-          </div>
-          <div class="sub-meta">
-            <span>Max Marks: 100</span>
-            <span>Grade: ${subGrade}</span>
-          </div>
+        // Web Table Row (No Full Marks shown)
+        const webTr = document.createElement('tr');
+        webTr.innerHTML = `
+          <td class="col-sno">${currentSno}</td>
+          <td>${sub}</td>
+          <td class="col-mark"><span class="mark-pill">${displayVal}</span></td>
         `;
-        subContainer.appendChild(card);
+        webTbody.appendChild(webTr);
 
-        // Printable Report Card Row
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="num">${serialNo++}</td>
+        // Printable Report Card Row (No Full Marks shown)
+        const printTr = document.createElement('tr');
+        printTr.innerHTML = `
+          <td class="num">${currentSno}</td>
           <td><strong>${sub}</strong></td>
-          <td class="num">100</td>
           <td class="num"><strong>${displayVal}</strong></td>
-          <td class="num">${subGrade}</td>
         `;
-        rcTbody.appendChild(tr);
+        rcTbody.appendChild(printTr);
       });
 
       // Switch Screen
@@ -1303,14 +1375,9 @@
       document.getElementById('result-section').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Animate Personal Progress Bars
-      setTimeout(() => {
-        document.querySelectorAll('#subjects-container .prog-fill').forEach(bar => {
-          bar.style.width = bar.getAttribute('data-target');
-        });
-      }, 150);
-
-      triggerConfetti();
+      if (myStats.isCalculated) {
+        triggerConfetti();
+      }
     }
 
     function getGradeInfo(percent) {
