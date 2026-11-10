@@ -456,7 +456,7 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 12px;
-      margin-bottom: 26px;
+      margin-bottom: 22px;
     }
     @media (min-width: 600px) {
       .subjects-grid { grid-template-columns: repeat(2, 1fr); }
@@ -513,33 +513,11 @@
       font-weight: 600;
     }
 
-    /* Comparison & Attendance Analytics Box */
-    .comparison-box {
-      background: rgba(255, 255, 255, 0.88);
-      border: 1.5px solid #ffffff;
-      border-radius: 22px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.06);
-    }
-    .comp-row {
-      margin-bottom: 16px;
-    }
-    .comp-row:last-child { margin-bottom: 0; }
-    .comp-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.84rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-dark);
-    }
-
-    /*Bottom Print CTA inside Result Card */
+    /* Bottom Print CTA inside Result Card */
     .bottom-print-bar {
       display: flex;
       justify-content: center;
-      margin-top: 22px;
+      margin-top: 10px;
     }
 
     /* ================= OFFICIAL PRINTABLE REPORT CARD ================= */
@@ -798,7 +776,7 @@
           </div>
         </div>
 
-        <!-- 4 KPI Cards -->
+        <!-- 4 KPI Cards (Personal Score & Personal Rank Only) -->
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="kpi-icon" style="background:rgba(79,70,229,0.12); color:#4f46e5;">
@@ -833,51 +811,12 @@
           </div>
         </div>
 
-        <!-- Subject Breakdown -->
+        <!-- Subject Breakdown (Only Student's Own Marks) -->
         <div class="sec-head">
-          <span class="material-symbols-rounded">analytics</span>
-          <span data-i18n="secSubjects">Subject-Wise Detailed Marks & Class Comparison</span>
+          <span class="material-symbols-rounded">menu_book</span>
+          <span data-i18n="secSubjects">Subject-Wise Marks Statement</span>
         </div>
         <div id="subjects-container" class="subjects-grid"></div>
-
-        <!-- Overall Class & Attendance Comparison -->
-        <div class="sec-head">
-          <span class="material-symbols-rounded">insights</span>
-          <span data-i18n="secCompare">Performance & Attendance Insights</span>
-        </div>
-        <div class="comparison-box">
-          
-          <div class="comp-row">
-            <div class="comp-header">
-              <span data-i18n="compYourScore">Your Percentage vs Class Average</span>
-              <span id="comp-score-text">0% (Avg: 0%)</span>
-            </div>
-            <div class="prog-track">
-              <div class="prog-fill" id="bar-your-score" style="background: linear-gradient(90deg, #4f46e5, #06b6d4);"></div>
-            </div>
-          </div>
-
-          <div class="comp-row">
-            <div class="comp-header">
-              <span data-i18n="compTopper">Class Topper Score</span>
-              <span id="comp-topper-text">0%</span>
-            </div>
-            <div class="prog-track">
-              <div class="prog-fill" id="bar-topper-score" style="background: linear-gradient(90deg, #f59e0b, #ef4444);"></div>
-            </div>
-          </div>
-
-          <div class="comp-row">
-            <div class="comp-header">
-              <span data-i18n="compAtt">Your Attendance vs Class Highest Attendance</span>
-              <span id="comp-att-text">-</span>
-            </div>
-            <div class="prog-track">
-              <div class="prog-fill" id="bar-att-score" style="background: linear-gradient(90deg, #10b981, #059669);"></div>
-            </div>
-          </div>
-
-        </div>
 
         <!-- Dedicated Bottom Print Button -->
         <div class="bottom-print-bar">
@@ -911,12 +850,11 @@
     <table class="rc-table">
       <thead>
         <tr>
-          <th style="width:50px;" class="num">S.No</th>
+          <th style="width:60px;" class="num">S.No</th>
           <th>Subject Name</th>
           <th class="num">Max Marks</th>
           <th class="num">Marks Obtained</th>
-          <th class="num">Class Average</th>
-          <th class="num">Subject Highest</th>
+          <th class="num">Subject Grade</th>
         </tr>
       </thead>
       <tbody id="rc-tbody"></tbody>
@@ -924,7 +862,7 @@
 
     <div class="rc-summary-grid">
       <div class="rc-sum-box">
-        <div class="lbl">Total Marks</div>
+        <div class="lbl">Marks Obtained</div>
         <div class="val" id="rc-total">0 / 0</div>
       </div>
       <div class="rc-sum-box">
@@ -959,7 +897,6 @@
     const SHEET_ID = "1Z2wmGyfiYwe40Zus-6EVEX76PsaQflraFp4umDVpmtk";
     const classDataCache = {};
 
-    // Alternative Sheet Tab Names (In case your sheet tabs are named slightly differently)
     const SHEET_ALIASES = {
       "NC": ["NC", "Nursery", "NUR", "Class NC"],
       "LKG": ["LKG", "Class LKG", "L.K.G"],
@@ -1006,13 +943,9 @@
         kpiPercent: "Percentage",
         kpiAtt: "Attendance",
         kpiRank: "Class Rank",
-        secSubjects: "Subject-Wise Detailed Marks & Class Comparison",
-        secCompare: "Performance & Attendance Insights",
-        compYourScore: "Your Percentage vs Class Average",
-        compTopper: "Class Topper Percentage",
-        compAtt: "Your Attendance vs Class Highest Attendance",
+        secSubjects: "Subject-Wise Marks Statement",
         errNotFound: "No matching result found! Please check your Class, Roll No, and Name spelling.",
-        errNetwork: "Could not load sheet data. Please check your internet connection or sheet tab name."
+        errNetwork: "Could not load sheet data. Please check your internet connection."
       },
       hi: {
         btnLang: "View in English",
@@ -1034,11 +967,7 @@
         kpiPercent: "प्रतिशत (%)",
         kpiAtt: "उपस्थिति (Attendance)",
         kpiRank: "कक्षा रैंक",
-        secSubjects: "विषयवार अंक और कक्षा औसत से तुलना",
-        secCompare: "प्रदर्शन और उपस्थिति विश्लेषण",
-        compYourScore: "आपका प्रतिशत बनाम कक्षा का औसत",
-        compTopper: "कक्षा टॉपर का प्रतिशत",
-        compAtt: "आपकी उपस्थिति बनाम सर्वाधिक उपस्थिति",
+        secSubjects: "विषयवार प्राप्तांक विवरण",
         errNotFound: "कोई परिणाम नहीं मिला! कृपया अपनी कक्षा, रोल नंबर और नाम की स्पेलिंग जांचें।",
         errNetwork: "डेटा लोड नहीं हो सका। कृपया अपना इंटरनेट कनेक्शन जांचें।"
       }
@@ -1084,7 +1013,7 @@
     }
 
     // ============================================================================
-    // ROBUST CSV PARSER & MULTI-METHOD GOOGLE SHEET FETCHER
+    // ROBUST CSV PARSER & GOOGLE SHEET FETCHER
     // ============================================================================
     function parseCSVText(csvText) {
       const rows = [];
@@ -1129,7 +1058,6 @@
 
       if (rows.length === 0) throw new Error("Empty CSV");
 
-      // Find header row (first row that contains Roll or Name)
       let headerRowIdx = 0;
       for (let r = 0; r < Math.min(5, rows.length); r++) {
         const joined = rows[r].join(" ").toLowerCase();
@@ -1168,7 +1096,6 @@
           const response = await fetch(csvUrl, { cache: "no-store" });
           if (response.ok) {
             const csvText = await response.text();
-            // Make sure it didn't return an HTML login page
             if (csvText && !csvText.trim().startsWith("<!DOCTYPE html>")) {
               const parsed = parseCSVText(csvText);
               if (parsed.headers.length > 1) {
@@ -1207,7 +1134,6 @@
         const sheetData = await fetchSheetDataSmart(cls);
         const { headers, records } = sheetData;
 
-        // Identify key columns dynamically
         const rollKey = headers.find(h => /roll/i.test(h)) || headers[0];
         const nameKey = headers.find(h => (/student|name/i.test(h)) && !/father|guardian/i.test(h)) || headers[1];
         const fatherKey = headers.find(h => /father|guardian/i.test(h)) || headers[2];
@@ -1215,16 +1141,13 @@
         const percentKey = headers.find(h => /percent/i.test(h));
         const attKey = headers.find(h => /attendance/i.test(h));
 
-        // Identify Subject columns
         const subjectKeys = headers.filter(h => {
           const clean = h.trim().toLowerCase();
           return clean && !NON_SUBJECT_KEYS.includes(clean);
         });
 
-        // Filter valid students
         const validStudents = records.filter(r => r[nameKey] && String(r[nameKey]).trim() !== "");
 
-        // Match student by Roll No + Flexible Name/Father Name
         const matchedStudent = validStudents.find(st => {
           const stRoll = String(st[rollKey] || "").trim().replace(/^0+/, "");
           const inpRollClean = rollInput.replace(/^0+/, "");
@@ -1254,7 +1177,7 @@
     }
 
     // ============================================================================
-    // RENDER RESULT + ATTENDANCE & PRINTABLE REPORT CARD
+    // RENDER PERSONAL RESULT & PRINTABLE REPORT CARD (NO CLASS COMPARISON)
     // ============================================================================
     function renderDetailedResult(clsName, student, allStudents, keys) {
       const { rollKey, nameKey, fatherKey, totalKey, percentKey, attKey, subjectKeys } = keys;
@@ -1279,13 +1202,10 @@
           sheetPercent = maxPossible > 0 ? ((sheetTotal / maxPossible) * 100) : 0;
         }
 
-        const attNum = (attKey && !isNaN(parseFloat(st[attKey]))) ? parseFloat(st[attKey]) : 0;
-
         return {
           total: sheetTotal,
           maxPossible: maxPossible || (subjectKeys.length * 100),
           percent: Math.min(100, Math.max(0, sheetPercent)),
-          attendance: attNum,
           rawAttendance: (attKey && st[attKey] !== "") ? st[attKey] : "N/A"
         };
       }
@@ -1293,15 +1213,9 @@
       const myStats = calcStudentStats(student);
       const allStats = allStudents.map(s => ({ st: s, stats: calcStudentStats(s) }));
 
-      // Sort for Rank
+      // Sort to determine Student's Personal Rank
       allStats.sort((a, b) => b.stats.total - a.stats.total);
       const myRank = allStats.findIndex(item => item.st === student) + 1;
-
-      const topperPercent = allStats.length > 0 ? allStats[0].stats.percent : myStats.percent;
-      const avgPercent = allStats.length > 0
-        ? allStats.reduce((acc, cur) => acc + cur.stats.percent, 0) / allStats.length
-        : myStats.percent;
-      const highestAtt = allStats.reduce((max, cur) => Math.max(max, cur.stats.attendance), 0);
 
       // Populate Web Profile Header
       const sNameVal = student[nameKey] || "-";
@@ -1313,15 +1227,14 @@
       document.getElementById('res-roll').innerText = rNoVal;
       document.getElementById('res-class').innerText = clsName;
 
-      // Grade & Status (Fixed variable declaration)
       const gradeInfo = getGradeInfo(myStats.percent);
       document.getElementById('res-grade').innerText = gradeInfo.grade;
       document.getElementById('res-status').innerText = gradeInfo.status;
 
-      // Populate KPI Cards
+      // Populate KPI Cards (Personal Only)
       const totalStr = `${myStats.total} / ${myStats.maxPossible}`;
       const percentStr = `${myStats.percent.toFixed(1)}%`;
-      const rankStr = `#${myRank} of ${allStudents.length}`;
+      const rankStr = `#${myRank}`;
 
       document.getElementById('res-total').innerText = totalStr;
       document.getElementById('res-percent').innerText = percentStr;
@@ -1340,7 +1253,7 @@
       document.getElementById('rc-grade').innerText = gradeInfo.grade;
       document.getElementById('rc-rank').innerText = rankStr;
 
-      // Populate Subject Cards & Print Table Rows
+      // Populate Subject Cards & Print Table Rows (Only Personal Score & Grade)
       const subContainer = document.getElementById('subjects-container');
       const rcTbody = document.getElementById('rc-tbody');
       subContainer.innerHTML = '';
@@ -1352,26 +1265,23 @@
         const displayVal = (rawVal !== undefined && rawVal !== "") ? rawVal : "-";
         const mySubScore = parseFloat(rawVal);
         const isNumeric = !isNaN(mySubScore);
+        const subGrade = isNumeric ? getGradeInfo(mySubScore).grade : "-";
+        const barWidth = isNumeric ? Math.min(100, Math.max(5, mySubScore)) : 0;
 
-        let subScores = allStudents.map(s => parseFloat(s[sub])).filter(n => !isNaN(n));
-        let subAvg = subScores.length ? (subScores.reduce((a, b) => a + b, 0) / subScores.length).toFixed(1) : "-";
-        let subMax = subScores.length ? Math.max(...subScores) : 100;
-        let barWidth = isNumeric ? Math.min(100, Math.max(5, mySubScore)) : 0;
-
-        // Web Card
+        // Web Card (Personal Marks & Grade Only)
         const card = document.createElement('div');
         card.className = 'sub-card';
         card.innerHTML = `
           <div class="sub-top">
             <span class="sub-name">${sub}</span>
-            <span class="sub-score">${displayVal}</span>
+            <span class="sub-score">${displayVal} / 100</span>
           </div>
           <div class="prog-track">
             <div class="prog-fill" style="width: 0%" data-target="${barWidth}%"></div>
           </div>
           <div class="sub-meta">
-            <span>Class Avg: ${subAvg}</span>
-            <span>Highest: ${subMax}</span>
+            <span>Max Marks: 100</span>
+            <span>Grade: ${subGrade}</span>
           </div>
         `;
         subContainer.appendChild(card);
@@ -1383,32 +1293,21 @@
           <td><strong>${sub}</strong></td>
           <td class="num">100</td>
           <td class="num"><strong>${displayVal}</strong></td>
-          <td class="num">${subAvg}</td>
-          <td class="num">${subMax}</td>
+          <td class="num">${subGrade}</td>
         `;
         rcTbody.appendChild(tr);
       });
-
-      // Populate Overall Comparison Bars
-      document.getElementById('comp-score-text').innerText = `${myStats.percent.toFixed(1)}% (Class Avg: ${avgPercent.toFixed(1)}%)`;
-      document.getElementById('comp-topper-text').innerText = `${topperPercent.toFixed(1)}%`;
-      
-      const attPercent = highestAtt > 0 ? Math.min(100, (myStats.attendance / highestAtt) * 100) : 85;
-      document.getElementById('comp-att-text').innerText = `${myStats.rawAttendance} (Highest: ${highestAtt || 'N/A'})`;
 
       // Switch Screen
       document.getElementById('search-section').style.display = 'none';
       document.getElementById('result-section').style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Animate Progress Bars
+      // Animate Personal Progress Bars
       setTimeout(() => {
         document.querySelectorAll('#subjects-container .prog-fill').forEach(bar => {
           bar.style.width = bar.getAttribute('data-target');
         });
-        document.getElementById('bar-your-score').style.width = `${myStats.percent}%`;
-        document.getElementById('bar-topper-score').style.width = `${topperPercent}%`;
-        document.getElementById('bar-att-score').style.width = `${attPercent}%`;
       }, 150);
 
       triggerConfetti();
